@@ -1,0 +1,12 @@
+CREATE TABLE users(
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tenant_id BIGINT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email  VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    account_state VARCHAR(20) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(tenant_id) REFERENCES tenants(id),
+    UNIQUE (tenant_id, email)
+)
