@@ -2,10 +2,13 @@ package com.workflow.workflow_saas.user;
 
 import com.workflow.workflow_saas.auditing.Auditable;
 import com.workflow.workflow_saas.auditing.AuditingEntityListener;
+import com.workflow.workflow_saas.role.Role;
 import com.workflow.workflow_saas.tenant.Tenant;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -19,6 +22,12 @@ public class User implements Auditable {
     @ManyToOne
     @JoinColumn(name = "tenant_id",nullable = false)
     private Tenant tenant;
+
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false)
     private String name;
@@ -68,6 +77,27 @@ public class User implements Auditable {
 
     public Long getId(){
         return this.id;
+    }
+
+    public Set<Role> getRoles(){
+        return this.roles;
+    }
+
+    public void addRole(Role role){
+        if(role == null){
+            throw new IllegalArgumentException("Role cannot be null!");
+        }
+        if(this.roles.contains(role)){
+            throw new DuplicateRoleException("This role is already assigned!");
+        }
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role){
+        if(!this.roles.contains(role)){
+            throw new RoleNotFoundException("Role not found");
+        }
+        this.roles.remove(role);
     }
 
     public void rename(String name){
