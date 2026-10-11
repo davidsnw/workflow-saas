@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Generated;
 
 import java.time.Instant;
+import java.util.Objects;
 
 
 @Entity
@@ -32,6 +33,10 @@ public class Tenant implements Auditable {
     }
 
     public Tenant(String name) {
+        Objects.requireNonNull(name, "Tenant name cannot be null");
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Tenant name cannot be blank!");
+        }
         this.name = name;
     }
 
@@ -55,6 +60,12 @@ public class Tenant implements Auditable {
     }
 
     public void rename(String name) {
+        if(name == null){
+            throw new IllegalArgumentException("Name cannot be null!");
+        }
+        if(name.isBlank()){
+            throw new IllegalArgumentException("Name cannot be blank!");
+        }
         this.name = name;
     }
 }

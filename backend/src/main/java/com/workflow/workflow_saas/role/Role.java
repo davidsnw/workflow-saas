@@ -2,6 +2,8 @@ package com.workflow.workflow_saas.role;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name="roles")
 public class Role {
@@ -19,6 +21,7 @@ public class Role {
     }
 
     public Role(RoleName roleName){
+        Objects.requireNonNull(roleName,"Role name cannot be null!");
         this.roleName = roleName;
     }
 

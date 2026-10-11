@@ -105,7 +105,7 @@ class WorkflowSaasApplicationTests {
 		reloadedUser.addRole(employeeRole);
 		reloadedUser = userRepository.saveAndFlush(reloadedUser);
 		User flushedUser = userRepository.saveAndFlush(reloadedUser);
-		Assertions.assertEquals(2,reloadedUser.getRoles().size());
+		Assertions.assertEquals(2,flushedUser.getRoles().size());
 		Assertions.assertThrows(DuplicateRoleException.class, () -> flushedUser.addRole(technicianRole));
 		}
 	}

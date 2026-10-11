@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -52,12 +53,28 @@ public class User implements Auditable {
 
     }
 
-    public User(Tenant tenant, String name, String email, String passwordHash, AccountState accountState){
-        this.tenant =tenant;
+    public User(Tenant tenant, String name, String email, String passwordHash, AccountState accountState) {
+        this.tenant = Objects.requireNonNull(tenant, "Tenant cannot be null");
+
+        Objects.requireNonNull(name, "User name cannot be null");
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("User name cannot be blank!");
+        }
         this.name = name;
+
+        Objects.requireNonNull(email, "E-mail cannot be null");
+        if (email.isBlank()) {
+            throw new IllegalArgumentException("E-mail cannot be blank!");
+        }
         this.email = email;
+
+        Objects.requireNonNull(passwordHash, "Password hash cannot be null");
+        if (passwordHash.isBlank()) {
+            throw new IllegalArgumentException("Password hash cannot be blank!");
+        }
         this.passwordHash = passwordHash;
-        this.accountState = accountState;
+
+        this.accountState = Objects.requireNonNull(accountState, "Account state cannot be null");
     }
 
     @Override
@@ -79,8 +96,16 @@ public class User implements Auditable {
         return this.id;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     public Set<Role> getRoles(){
         return this.roles;
+    }
+
+    public AccountState getAccountState(){
+        return this.accountState;
     }
 
     public void addRole(Role role){
@@ -101,6 +126,27 @@ public class User implements Auditable {
     }
 
     public void rename(String name){
+        if(name == null){
+            throw new IllegalArgumentException("Name cannot be null!");
+        }
+        if(name.isBlank()){
+            throw new IllegalArgumentException("Name cannot be blank!");
+        }
         this.name = name;
     }
+
+    public void activateUser(){
+        if(this.accountState.equals(AccountState.ACTIVE)){
+            throw new IllegalStateException("The user is already active");
+        }
+            this.accountState = AccountState.ACTIVE;
+    }
+
+    public void deactivateUser(){
+        if(this.accountState.equals(AccountState.INACTIVE)){
+            throw new IllegalStateException("The user is already inactive");
+        }
+        this.accountState = AccountState.INACTIVE;
+    }
 }
+
