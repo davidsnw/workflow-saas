@@ -7,8 +7,7 @@ import com.workflow.workflow_saas.role.RoleName;
 import com.workflow.workflow_saas.role.RoleRepository;
 import com.workflow.workflow_saas.tenant.Tenant;
 import com.workflow.workflow_saas.tenant.TenantRepository;
-import com.workflow.workflow_saas.user.AccountState;
-import com.workflow.workflow_saas.user.DuplicateRoleException;
+import com.workflow.workflow_saas.user.exception.DuplicateRoleException;
 import com.workflow.workflow_saas.user.User;
 import com.workflow.workflow_saas.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,8 +19,7 @@ import org.springframework.test.context.TestConstructor;
 import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@Transactional
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class WorkflowSaasApplicationTests {
@@ -75,7 +73,7 @@ class WorkflowSaasApplicationTests {
 		void userPersistenceAndAuditing(){
 		Tenant tenant = new Tenant("Test tenant");
 		Tenant savedTenant = tenantRepository.save(tenant);
-		User user = new User(savedTenant,"Test user","usertesting@gmail.com","jhkgfsdu54u64k", AccountState.ACTIVE);
+		User user = new User(savedTenant,"Test user","usertesting@gmail.com","jhkgfsdu54u64k", User.AccountState.ACTIVE);
 		User savedUser = userRepository.save(user);
 		Assertions.assertNotNull(savedUser.getId());
 		Assertions.assertNotNull(savedUser.getUpdatedAt());
@@ -93,7 +91,7 @@ class WorkflowSaasApplicationTests {
 		Assertions.assertTrue(technician.isPresent());
 		Tenant tenant = new Tenant("Test tenant");
 		Tenant savedTenant = tenantRepository.save(tenant);
-		User user = new User(savedTenant,"Test user","usertesting@gmail.com","jhkgfsdu54u64k", AccountState.ACTIVE);
+		User user = new User(savedTenant,"Test user","usertesting@gmail.com","jhkgfsdu54u64k", User.AccountState.ACTIVE);
 		User savedUser = userRepository.save(user);
 		Role technicianRole = technician.get();
 		savedUser.addRole(technicianRole);

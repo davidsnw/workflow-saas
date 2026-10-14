@@ -4,6 +4,8 @@ import com.workflow.workflow_saas.auditing.Auditable;
 import com.workflow.workflow_saas.auditing.AuditingEntityListener;
 import com.workflow.workflow_saas.role.Role;
 import com.workflow.workflow_saas.tenant.Tenant;
+import com.workflow.workflow_saas.user.exception.DuplicateRoleException;
+import com.workflow.workflow_saas.user.exception.RoleNotFoundException;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -100,6 +102,18 @@ public class User implements Auditable {
         return this.name;
     }
 
+    public String getEmail(){
+        return  this.email;
+    }
+
+    public String getPasswordHash(){
+        return this.passwordHash;
+    }
+
+    public Tenant getTenant(){
+        return this.tenant;
+    }
+
     public Set<Role> getRoles(){
         return this.roles;
     }
@@ -147,6 +161,11 @@ public class User implements Auditable {
             throw new IllegalStateException("The user is already inactive");
         }
         this.accountState = AccountState.INACTIVE;
+    }
+
+    public enum AccountState {
+        ACTIVE,
+        INACTIVE
     }
 }
 

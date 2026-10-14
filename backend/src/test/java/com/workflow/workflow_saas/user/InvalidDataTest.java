@@ -11,13 +11,13 @@ public class InvalidDataTest {
     @Test
     public void nullTenantTest() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> new User(null, "test user", "testuser@gmail.com", "somePasswordHash", AccountState.ACTIVE));
+                () -> new User(null, "test user", "testuser@gmail.com", "somePasswordHash", User.AccountState.ACTIVE));
     }
 
     @Test
     public void nullNameTest() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> new User(new Tenant("Test Tenant"), null, "testuser@gmail.com", "somePasswordHash", AccountState.ACTIVE));
+                () -> new User(new Tenant("Test Tenant"), null, "testuser@gmail.com", "somePasswordHash", User.AccountState.ACTIVE));
     }
 
     @ParameterizedTest
@@ -32,7 +32,7 @@ public class InvalidDataTest {
                         name,
                         "testuser@gmail.com",
                         "somePasswordHash",
-                        AccountState.ACTIVE
+                        User.AccountState.ACTIVE
                 )
         );
     }
@@ -40,7 +40,7 @@ public class InvalidDataTest {
     @Test
     public void nullEmailTest() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> new User(new Tenant("Test Tenant"), "Test user", null, "somePasswordHash", AccountState.ACTIVE));
+                () -> new User(new Tenant("Test Tenant"), "Test user", null, "somePasswordHash", User.AccountState.ACTIVE));
     }
 
     @ParameterizedTest
@@ -55,7 +55,7 @@ public class InvalidDataTest {
                         "Test user",
                         email,
                         "somePasswordHash",
-                        AccountState.ACTIVE
+                        User.AccountState.ACTIVE
                 )
         );
     }
@@ -64,7 +64,7 @@ public class InvalidDataTest {
     @Test
     public void nullPasswordHashTest() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", null, AccountState.ACTIVE));
+                () -> new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", null, User.AccountState.ACTIVE));
     }
 
     @ParameterizedTest
@@ -79,7 +79,7 @@ public class InvalidDataTest {
                         "Test user",
                         "testuser@gmail.com",
                         passwordHash,
-                        AccountState.ACTIVE
+                        User.AccountState.ACTIVE
                 )
         );
     }
@@ -93,7 +93,7 @@ public class InvalidDataTest {
 
     @Test
     public void assignNullNameToUserTest(){
-        User testUser = new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", "somePasswordHash", AccountState.INACTIVE);
+        User testUser = new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", "somePasswordHash", User.AccountState.INACTIVE);
         Assertions.assertThrows(IllegalArgumentException.class,() -> testUser.rename(null));
     }
 
@@ -103,7 +103,7 @@ public class InvalidDataTest {
             "", " ", "\t", "\n", "\r", "\t\n\r", "\u2003"
     })
     public void assignBlankNameToUserTest(String name){
-        User testUser = new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", "somePasswordHash", AccountState.INACTIVE);
+        User testUser = new User(new Tenant("Test Tenant"), "test user", "testuser@gmail.com", "somePasswordHash", User.AccountState.INACTIVE);
         Assertions.assertThrows(IllegalArgumentException.class,() -> testUser.rename(name));
     }
 
@@ -114,7 +114,7 @@ public class InvalidDataTest {
                 "Old name",
                 "testuser@gmail.com",
                 "somePasswordHash",
-                AccountState.ACTIVE
+                User.AccountState.ACTIVE
         );
 
         testUser.rename("New name");
